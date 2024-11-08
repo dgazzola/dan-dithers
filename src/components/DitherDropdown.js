@@ -1,44 +1,48 @@
 'use client'
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { ditherFunction } from '@/utility/DitherFunction';
+import { ditherFunction } from '@/utility/ditherFunction';
 
 const DitherDropdown = ({ originalImage, setDitheredImage, originalCanvasRef }) => {
   const [selectedDither, setSelectedDither] = React.useState('');
 
   const handleDitherChange = (event) => {
     setSelectedDither(event.target.value);
-
+  
     if (originalImage && originalCanvasRef.current) {
       const canvas = originalCanvasRef.current;
       const ctx = canvas.getContext('2d');
-
-      // Ensure the canvas is drawn with the original image before dithering
       const img = new Image();
       img.src = originalImage;
+  
       img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        // Apply dithering function
-        ditherFunction(event.target.value, ctx, canvas.width, canvas.height);
+        const maxWidth = 800;
+        const maxHeight = 600;
+        const scaleFactor = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+  
+        const newWidth = img.width * scaleFactor;
+        const newHeight = img.height * scaleFactor;
+  
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+  
+        ditherFunction(event.target.value, ctx, newWidth, newHeight);
         const ditheredDataUrl = canvas.toDataURL('image/png');
-        console.log('Dithered Image Data URL:', ditheredDataUrl);
-
+  
         if (ditheredDataUrl) {
           setDitheredImage(ditheredDataUrl);
         } else {
-          console.error('Failed to generate data URL from canvas.');
+          console.error('Failed to generate URL from canvas.');
         }
       };
     } else {
       console.error('Original image or canvas reference is missing.');
     }
-  };
+  };  
 
   return (
-    <FormControl fullWidth sx={{ mb: 2 }}>
+    <FormControl fullWidth sx={{ mb: 2, width:'42vw', margin:2 }}>
       <InputLabel id="dither-select-label">Select Dither Algorithm</InputLabel>
       <Select
         labelId="dither-select-label"
@@ -46,7 +50,7 @@ const DitherDropdown = ({ originalImage, setDitheredImage, originalCanvasRef }) 
         value={selectedDither}
         label="Select Dither Algorithm"
         onChange={handleDitherChange}
-        disabled={!originalImage} // Disable if no image is uploaded
+        disabled={!originalImage}
       >
         <MenuItem value="threshold">Threshold Dither</MenuItem>
         <MenuItem value="floyd-steinberg">Floyd–Steinberg Dither</MenuItem>

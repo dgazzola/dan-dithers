@@ -1,27 +1,36 @@
 import React, { useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import Image from 'next/image'; // Keep this for rendering, but not for `new Image()`
+import { Box } from '@mui/material';
+import Image from 'next/image';
 
-// Use forwardRef to pass the canvas ref from the parent component
-const ImagePreview = React.forwardRef(({ src, label }, ref) => {
+const ImagePreview = React.forwardRef(({ src, maxWidth = 800, maxHeight = 600, sx }, ref) => {
   useEffect(() => {
     if (ref.current && src) {
-      const img = document.createElement('img'); // Use the native image constructor
+      const img = new window.Image();
       img.src = src;
       img.onload = () => {
+        const scaleFactor = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+        const newWidth = img.width * scaleFactor;
+        const newHeight = img.height * scaleFactor;
+
+        ref.current.width = newWidth;
+        ref.current.height = newHeight;
         const ctx = ref.current.getContext('2d');
-        ref.current.width = img.width;
-        ref.current.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        ctx.clearRect(0, 0, newWidth, newHeight);
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
       };
     }
-  }, [src, ref]);
+  }, [src, ref, maxWidth, maxHeight]);
 
   return (
-    <Box mt={2}>
-      <Typography variant="h6">{label || 'Image Preview'}:</Typography>
-      {/* Display image with next/image component */}
-      <Image src={src} alt={label || 'Preview'} layout="responsive" width={700} height={400} />
+    <Box mt={2} sx={{ maxWidth: '100%', maxHeight: '600px', overflow: 'hidden', ...sx }}>
+      <Image
+        src={src}
+        alt={'Image Preview'}
+        layout="responsive"
+        width={700}
+        height={400}
+        style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }}
+      />
       <canvas ref={ref} style={{ display: 'none' }} />
     </Box>
   );

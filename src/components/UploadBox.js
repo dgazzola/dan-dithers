@@ -1,9 +1,10 @@
+// UploadBox.js
 'use client'
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-const UploadBox = ({ setOriginalImage, setDitheredImage, originalCanvasRef, ditheredCanvasRef, originalImage }) => {
+const UploadBox = ({ setOriginalImage }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -11,11 +12,7 @@ const UploadBox = ({ setOriginalImage, setDitheredImage, originalCanvasRef, dith
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          if (originalImage){
-            setDitheredImage(e.target.result);
-          } else {
-            setOriginalImage(e.target.result);
-          }
+          setOriginalImage(e.target.result);
         };
         reader.readAsDataURL(file);
       }
@@ -23,10 +20,22 @@ const UploadBox = ({ setOriginalImage, setDitheredImage, originalCanvasRef, dith
   });
 
   return (
-      <Box {...getRootProps()} sx={{ border: '2px dashed #ccc', padding: '16px', textAlign: 'center' }}>
-        <input {...getInputProps()} />
-        <Typography>Drag and drop an image here, or click to select</Typography>
-      </Box>
+    <Box
+      {...getRootProps()}
+      sx={{
+        border: '2px dashed #ccc',
+        padding: '32px',
+        textAlign: 'center',
+        backgroundColor: '#f9f9f9',
+        width: '100%',
+        maxWidth: '600px',
+        margin: '0 auto',
+        boxShadow: 2,
+      }}
+    >
+      <input {...getInputProps()} />
+      <Typography variant="h6" className='flex-center'>Drag and drop an image here, or click to select</Typography>
+    </Box>
   );
 };
 

@@ -1,5 +1,3 @@
-// Dithering Algorithms
-
 const applyThresholdDither = (ctx, width, height) => {
   const imageData = ctx.getImageData(0, 0, width, height);
   const data = imageData.data;
@@ -132,7 +130,6 @@ const applyJarvisJudiceNinkeDither = (ctx, width, height) => {
   ctx.putImageData(imageData, 0, 0);
 };
 
-// Main Dither Function
 export const ditherFunction = (ditherName, ctx, width, height) => {
   switch (ditherName) {
     case 'threshold':

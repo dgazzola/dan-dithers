@@ -1,0 +1,13 @@
+
+
+.centered-item { 
+  width: 50%;
+  margin: 0 auto;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh; /* Full viewport height */
+}

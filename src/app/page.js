@@ -2,7 +2,7 @@
 import { useState, useRef } from 'react';
 import ImagePreview from '@/components/ImagePreview';
 import UploadBox from '@/components/UploadBox';
-import styles from '@/styles/styles.css'
+import '../styles/styles.css'
 import DitherDropdown from '@/components/DitherDropdown';
 import { Box, Button, Container, Typography } from '@mui/material';
 
@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Typography variant="h1" className='centered-item'>Dan Dithers</Typography>
+      <Typography variant="h1" className="centered-item">Dan Dithers</Typography>
       <Box sx={{ display: 'flex', position: 'relative' }}>
         {originalImage && (
           <ImagePreview src={originalImage} ref={originalCanvasRef} />

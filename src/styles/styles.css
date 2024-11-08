@@ -1,7 +1,7 @@
 
 
-.centered-item { 
-  width: 50%;
+.centered-item {
+  text-align: center;
   margin: 0 auto;
 }
 
@@ -9,5 +9,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20vh; /* Full viewport height */
+  height: 20vh;
 }

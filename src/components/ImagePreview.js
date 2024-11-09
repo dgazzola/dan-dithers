@@ -22,14 +22,14 @@ const ImagePreview = React.forwardRef(({ src, maxWidth = 800, maxHeight = 600, s
   }, [src, ref, maxWidth, maxHeight]);
 
   return (
-    <Box mt={2} sx={{ maxWidth: '100%', maxHeight: '600px', overflow: 'hidden', ...sx }}>
+    <Box mt={2} sx={{ position: 'relative',width: '100%', maxHeight: '600px', overflow: 'hidden', ...sx }}>
       <Image
         src={src}
-        alt={'Image Preview'}
+        alt={'Preview'}
         layout="responsive"
         width={700}
         height={400}
-        style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }}
+        style={{ width: '100%', maxHeight: '600px', objectFit: 'contain' }}
       />
       <canvas ref={ref} style={{ display: 'none' }} />
     </Box>

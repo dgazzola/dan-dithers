@@ -1,4 +1,3 @@
-// UploadBox.js
 'use client'
 import React from 'react';
 import { useDropzone } from 'react-dropzone';

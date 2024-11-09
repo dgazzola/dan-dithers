@@ -1,8 +1,8 @@
-'use client'
+'use client';
 import { useState, useRef } from 'react';
 import ImagePreview from '@/components/ImagePreview';
 import UploadBox from '@/components/UploadBox';
-import '../styles/styles.css'
+import '../styles/styles.css';
 import DitherDropdown from '@/components/DitherDropdown';
 import { Box, Button, Container, Typography } from '@mui/material';
 
@@ -49,42 +49,54 @@ export default function Home() {
   };
 
   return (
-    <Container>
+    <Container sx={{ maxWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Typography variant="h1" className="centered-item">Dan Dithers</Typography>
-      <Box sx={{ display: 'flex', position: 'relative' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1vw' }}>
         {originalImage && (
-          <ImagePreview src={originalImage} ref={originalCanvasRef} />
+          <ImagePreview src={originalImage} ref={originalCanvasRef}/>
         )}
         {ditheredImage && (
-          <Box sx={{ position: 'relative' }}>
-            <ImagePreview src={ditheredImage} ref={ditheredCanvasRef} />
-            <Button 
-              variant="contained" 
-              onClick={handleDownload} 
-              sx={{ position: 'absolute', bottom: 10, right: 10 }}
-            >
-              Download
-            </Button>
-            <Box sx={{ position: 'absolute', bottom: 10, left: 10, display: 'flex', gap: 1 }}>
-              <Button 
-                variant="contained" 
-                onClick={handleBack} 
-                disabled={currentDitherIndex <= 0}
-              >
-                Back
-              </Button>
-              <Button 
-                variant="contained" 
-                onClick={handleForward} 
-                disabled={currentDitherIndex >= ditherHistory.length - 1}
-              >
-                Forward
-              </Button>
-            </Box>
-          </Box>
+            <ImagePreview src={ditheredImage} ref={ditheredCanvasRef}/>
+
         )}
       </Box>
-      <Box>
+      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', gap:'2rem', justifyContent:'center' }}>
+        {originalImage && (
+          <>
+                <Button
+                  variant="contained"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
+        {ditheredImage && (
+          <>
+            <Button
+              variant="contained"
+              onClick={handleBack}
+              disabled={currentDitherIndex <= 0}
+            >
+              Back
+            </Button>
+            <Button
+            variant="contained"
+            onClick={handleForward}
+            disabled={currentDitherIndex >= ditherHistory.length - 1}
+            >
+              Forward
+            </Button>
+          <Button
+          variant="contained"
+          onClick={handleDownload}
+          >
+            Download
+          </Button>
+        </>
+
+)}
+        </>
+          )}
+          </Box>
         {originalImage && (
           <DitherDropdown
             originalImage={originalImage}
@@ -97,27 +109,15 @@ export default function Home() {
             originalCanvasRef={originalCanvasRef}
           />
         )}
-        {originalImage && (
-          <Box> 
-            <Button 
-              variant="contained" 
-              onClick={handleReset} 
-              sx={{ position: 'relative', bottom: 10, right: 10 }}
-            >
-              Reset
-            </Button>
-          </Box>
+        {!originalImage && (
+          <UploadBox
+            setOriginalImage={setOriginalImage}
+            setDitheredImage={setDitheredImage}
+            originalCanvasRef={originalCanvasRef}
+            ditheredCanvasRef={ditheredCanvasRef}
+            originalImage={originalImage}
+          />
         )}
-        {!originalImage &&
-        <UploadBox
-          setOriginalImage={setOriginalImage}
-          setDitheredImage={setDitheredImage}
-          originalCanvasRef={originalCanvasRef}
-          ditheredCanvasRef={ditheredCanvasRef}
-          originalImage={originalImage}
-        />}
-      </Box>
-
     </Container>
   );
 }
